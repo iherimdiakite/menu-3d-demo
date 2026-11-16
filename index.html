@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Maquis du Lagon — Menu 3D</title>
+<meta name="theme-color" content="#fbf5ec">
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
+<style>
+  :root { --fond:#fbf5ec; --carte:#fff; --encre:#2b1d14; --doux:#7a6a5d; --accent:#c2410c; --trait:#eadfce; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--fond); color:var(--encre);
+         font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  header { padding:28px 20px 8px; text-align:center; }
+  header h1 { margin:0; font:700 26px/1.2 Georgia,"Times New Roman",serif; }
+  header p { margin:6px 0 0; color:var(--doux); font-size:14px; }
+  main { max-width:520px; margin:0 auto; padding:12px 16px 24px; display:grid; gap:14px; }
+
+  .item { display:grid; grid-template-columns:116px 1fr; gap:14px; align-items:center; width:100%;
+          padding:10px; border:1px solid var(--trait); border-radius:18px; background:var(--carte);
+          color:inherit; font:inherit; text-align:left; cursor:pointer; }
+  .item:active { transform:scale(.99); }
+  .item model-viewer { width:116px; height:116px; border-radius:12px; pointer-events:none;
+                       background:radial-gradient(circle at 50% 35%,#fff,#f1e6d4); }
+  .item h2 { margin:0; font-size:17px; }
+  .item p { margin:4px 0 8px; color:var(--doux); font-size:13.5px; }
+  .ligne { display:flex; justify-content:space-between; align-items:center; gap:8px; }
+  .prix { font-weight:700; white-space:nowrap; }
+  .pastille { padding:5px 11px; border-radius:99px; background:var(--accent); color:#fff;
+              font-size:12.5px; font-weight:600; white-space:nowrap; }
+  footer { max-width:520px; margin:0 auto; padding:0 20px 32px; color:var(--doux); font-size:12.5px; text-align:center; }
+
+  dialog { width:100vw; height:100dvh; max-width:none; max-height:none; margin:0; padding:0; border:0;
+           background:var(--fond); color:var(--encre); flex-direction:column; }
+  dialog[open] { display:flex; }
+  .barre { display:flex; align-items:center; gap:12px; padding:10px 14px; }
+  .barre h2 { flex:1; margin:0; font-size:17px; }
+  .fermer { width:44px; height:44px; border:1px solid var(--trait); border-radius:50%; background:var(--carte);
+            color:var(--encre); font-size:22px; line-height:1; cursor:pointer; }
+  dialog model-viewer { flex:1; width:100%; min-height:0;
+                        background:radial-gradient(circle at 50% 40%,#fff,#f1e6d4 75%); }
+  model-viewer::part(default-progress-bar) { display:none; }
+  .infos { padding:12px 18px calc(16px + env(safe-area-inset-bottom)); }
+  .infos p { margin:0 0 6px; font-size:14.5px; }
+  .infos small { color:var(--doux); }
+
+  /* étiquettes : point + trait + texte ; model-viewer retire data-visible quand la face est cachée */
+  .hs { position:relative; width:14px; height:14px; padding:0; border:2px solid #fff; border-radius:50%;
+        background:var(--accent); box-shadow:0 1px 4px #0006; transition:opacity .25s; --len:30px; }
+  .hs::before { content:""; position:absolute; background:var(--encre);
+                left:calc(50% - .75px); bottom:100%; width:1.5px; height:var(--len); }
+  .hs span { position:absolute; left:50%; bottom:calc(100% + var(--len)); transform:translateX(-50%);
+             padding:4px 9px; border-radius:8px; background:var(--encre); color:#fff;
+             font:600 12.5px/1.25 system-ui,sans-serif; white-space:nowrap; text-align:left; }
+  .hs.d::before, .hs.g::before { top:calc(50% - .75px); bottom:auto; height:1.5px; width:var(--len); }
+  .hs.d::before { left:100%; }
+  .hs.g::before { left:auto; right:100%; }
+  .hs.d span, .hs.g span { bottom:auto; top:50%; transform:translateY(-50%); }
+  .hs.d span { left:calc(100% + var(--len)); }
+  .hs.g span { left:auto; right:calc(100% + var(--len)); }
+  .hs.b::before { top:100%; bottom:auto; }
+  .hs.b span { top:calc(100% + var(--len)); bottom:auto; }
+  .hs:not([data-visible]) { opacity:0; pointer-events:none; }
+
+  .ar { position:absolute; left:50%; bottom:14px; transform:translateX(-50%); padding:13px 22px; border:0;
+        border-radius:99px; background:var(--accent); color:#fff; font:700 15.5px system-ui,sans-serif;
+        box-shadow:0 4px 14px #0004; white-space:nowrap; cursor:pointer; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Maquis du Lagon</h1>
+  <p>Touchez un plat pour le voir en 3D, tel qu'il sera servi</p>
+</header>
+
+<main>
+  <button class="item" data-open="d-plat">
+    <model-viewer src="modeles/attieke-poisson.glb" alt="" camera-orbit="20deg 55deg auto"
+                  interaction-prompt="none" shadow-intensity="1" exposure="1.1"></model-viewer>
+    <div>
+      <h2>Attiéké poisson braisé</h2>
+      <p>Carpe braisée, attiéké, sauce tomate-oignon, alloco et piment.</p>
+      <div class="ligne"><span class="prix">6 500 FCFA</span><span class="pastille">Voir en 3D</span></div>
+    </div>
+  </button>
+
+  <button class="item" data-open="d-cocktail">
+    <model-viewer src="modeles/cocktail-bissap.glb" alt="" camera-orbit="20deg 75deg auto"
+                  interaction-prompt="none" shadow-intensity="1" exposure="1.1"></model-viewer>
+    <div>
+      <h2>Mojito bissap</h2>
+      <p>Bissap infusé maison, menthe fraîche, citron vert, glaçons. Verre de 40 cl.</p>
+      <div class="ligne"><span class="prix">4 000 FCFA</span><span class="pastille">Voir en 3D</span></div>
+    </div>
+  </button>
+</main>
+
+<footer>Démo : visuels 3D d'illustration. En service, chaque plat est capturé au téléphone dans votre cuisine.</footer>
+
+<dialog id="d-plat">
+  <form method="dialog" class="barre">
+    <button class="fermer" aria-label="Fermer">×</button>
+    <h2>Attiéké poisson braisé</h2><span class="prix">6 500 FCFA</span>
+  </form>
+  <model-viewer src="modeles/attieke-poisson.glb" alt="Attiéké poisson braisé en 3D"
+                loading="eager" camera-controls touch-action="none" camera-orbit="20deg 55deg auto"
+                min-camera-orbit="auto 0deg auto" max-camera-orbit="auto 180deg 300%"
+                shadow-intensity="1" exposure="1.1"
+                ar ar-modes="webxr scene-viewer quick-look" ar-scale="fixed">
+    <button class="hs" slot="hotspot-attieke" data-visibility-attribute="visible" data-position="-0.04 0.043 -0.05" data-normal="-0.3 0.9 -0.3"><span>Attiéké</span></button>
+    <button class="hs b" slot="hotspot-poisson" data-visibility-attribute="visible" data-position="0.0 0.035 0.062" data-normal="0 0.5 0.87" style="--len:44px"><span>Poisson braisé</span></button>
+    <button class="hs" slot="hotspot-sauce" data-visibility-attribute="visible" data-position="0.047 0.028 -0.062" data-normal="0.3 0.9 -0.3" style="--len:30px"><span>Sauce<br>tomate-oignon</span></button>
+    <button class="hs d" slot="hotspot-alloco" data-visibility-attribute="visible" data-position="0.08 0.034 -0.012" data-normal="0.87 0.5 0" style="--len:22px"><span>Alloco</span></button>
+    <button class="hs g" slot="hotspot-piment" data-visibility-attribute="visible" data-position="-0.02 0.018 0.004" data-normal="-0.5 0.85 0.15" style="--len:60px"><span>Piment</span></button>
+    <button class="ar" slot="ar-button">Voir sur ma table</button>
+  </model-viewer>
+  <div class="infos">
+    <p>Carpe braisée, attiéké, sauce tomate-oignon, alloco et piment. Assiette de 30 cm.</p>
+    <small>Faites pivoter avec le doigt, pincez pour zoomer.</small>
+    <small class="sans-ra" hidden><br>« Voir sur ma table » n'est pas disponible sur cet appareil.</small>
+  </div>
+</dialog>
+
+<dialog id="d-cocktail">
+  <form method="dialog" class="barre">
+    <button class="fermer" aria-label="Fermer">×</button>
+    <h2>Mojito bissap</h2><span class="prix">4 000 FCFA</span>
+  </form>
+  <model-viewer src="modeles/cocktail-bissap.glb" alt="Mojito bissap en 3D"
+                loading="eager" camera-controls touch-action="none" camera-orbit="20deg 75deg 170%"
+                min-camera-orbit="auto 0deg auto" max-camera-orbit="auto 180deg 300%"
+                shadow-intensity="1" exposure="1.1"
+                ar ar-modes="webxr scene-viewer quick-look" ar-scale="fixed">
+    <button class="hs d" slot="hotspot-verre" data-visibility-attribute="visible" data-position="0.023 0.06 0.023" data-normal="0.7 0 0.7" style="--len:20px"><span>Verre 40 cl<br>15 cm de haut</span></button>
+    <button class="hs g" slot="hotspot-bissap" data-visibility-attribute="visible" data-position="-0.027 0.085 0.02" data-normal="-0.8 0 0.6" style="--len:12px"><span>Bissap<br>infusé maison</span></button>
+    <button class="hs" slot="hotspot-glacons" data-visibility-attribute="visible" data-position="0.004 0.141 0.008" data-normal="0.3 0.6 0.74" style="--len:70px"><span>Glaçons</span></button>
+    <button class="hs g" slot="hotspot-menthe" data-visibility-attribute="visible" data-position="-0.022 0.155 0.012" data-normal="-0.7 0.5 0.5" style="--len:12px"><span>Menthe fraîche</span></button>
+    <button class="hs d" slot="hotspot-citron" data-visibility-attribute="visible" data-position="0.04 0.165 0" data-normal="0.8 0.6 0" style="--len:22px"><span>Citron vert</span></button>
+    <button class="ar" slot="ar-button">Voir sur ma table</button>
+  </model-viewer>
+  <div class="infos">
+    <p>Bissap infusé maison, menthe fraîche, citron vert, glaçons. Verre de 40 cl.</p>
+    <small>Faites pivoter avec le doigt, pincez pour zoomer.</small>
+    <small class="sans-ra" hidden><br>« Voir sur ma table » n'est pas disponible sur cet appareil.</small>
+  </div>
+</dialog>
+
+<script>
+  document.querySelectorAll('[data-open]').forEach(b =>
+    b.onclick = () => document.getElementById(b.dataset.open).showModal());
+  // model-viewer masque lui-même le bouton RA quand l'appareil ne sait pas faire ; on l'explique.
+  document.querySelectorAll('dialog model-viewer').forEach(mv =>
+    mv.addEventListener('load', () => {
+      if (!mv.canActivateAR) mv.closest('dialog').querySelector('.sans-ra').hidden = false;
+    }));
+</script>
+</body>
+</html>
